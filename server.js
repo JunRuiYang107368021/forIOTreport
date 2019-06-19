@@ -15,43 +15,43 @@ app.use(bodyParser.json());
 app.get('/watering', function (req, res) {
   // watering?moiS=值&moiE=值
   // for test http://localhost:3000/watering?moiS=515&moiE=900
-  var moistureStart = req.query.moiS ;
-  var moistureEnd = req.query.moiE ;
+  var moistureStart = req.query.moiS;
+  var moistureEnd = req.query.moiE;
   console.log(moistureStart);
   console.log(moistureEnd);
-  var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+  var time = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
   console.log(time);
-  dbb.watering.insert({ 'moistureStart' : moistureStart, 'moistureEnd' : moistureEnd, 'Time' : time }, function(err,doc) {
+  dbb.watering.insert({ 'moistureStart': moistureStart, 'moistureEnd': moistureEnd, 'Time': time }, function (err, doc) {
     res.status(200).json('ok');
-  }) 
+  })
 })
 
-app.get('/moisture/:moi', function(req,res){
-  var moisture = req.params.moi ;
-  var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
-  console.log(moisture) ;
-  console.log(time) ;
-  dbb.moisture.insert({ 'moisture' : moisture, 'Time' : time }, function(err,doc) {
+app.get('/moisture/:moi', function (req, res) {
+  var moisture = req.params.moi;
+  var time = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
+  console.log(moisture);
+  console.log(time);
+  dbb.moisture.insert({ 'moisture': moisture, 'Time': time }, function (err, doc) {
     res.json('ok');
   })
 })
 
-app.get('/checkWatering', function(req,res) {
-  var result = null ;
-  dbb.watering.find(function(err,doc) {
-    var result = doc ;
+app.get('/checkWatering', function (req, res) {
+  var result = null;
+  dbb.watering.find().sort({_id:-1}, function (err, doc) {
+    var result = doc;
     console.log(result)
-    dbb.moisture.findOne( function(err,doc) {
-      result[5] = doc ;
-      console.log(result[5]) ;
+    dbb.moisture.findOne().sort({_id:-1}, function (err, doc) {
+      result[5] = doc;
+      console.log(result[5]);
       res.status(200).json(result);
+    })
   })
-})
 });
 
 
-app.get('/checkMoisture', function(req,res) {
-  dbb.moisture.find(function(err,doc){
+app.get('/checkMoisture', function (req, res) {
+  dbb.moisture.find(function (err, doc) {
     res.status(200).json(doc);
   })
 })
