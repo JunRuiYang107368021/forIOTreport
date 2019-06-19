@@ -41,7 +41,7 @@ app.get('/checkWatering', function (req, res) {
   dbb.watering.find().sort({_id:-1}, function (err, doc) {
     var result = doc;
     console.log(result)
-    dbb.moisture.findOne().sort({_id:-1}, function (err, doc) {
+    dbb.moisture.find().limit(1).sort({_id:-1}, function (err, doc) {
       result[5] = doc;
       console.log(result[5]);
       res.status(200).json(result);
